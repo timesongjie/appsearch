@@ -1,0 +1,103 @@
+
+
+索引映射
+
+#创建索引
+$ curl -XPUT http://localhost:9200/test-index
+
+#创建Mapping
+$ curl -XPUT http://localhost:9200/test-index/test-type/_mapping -d '{
+    "properties" : {
+        "name" : { "type" : "string" }
+    }
+}'
+
+索引
+#索引
+$ curl -XPUT http://localhost:9200/test-index/test-type/1 -d '{
+    "user": "kimchy",
+    "post_date": "2009-11-15T13:12:00",
+    "message": "Trying out elasticsearch, so far so good?"
+}'
+
+#按ID获取/查询
+$ curl -XGET http://localhost:9200/test-index/test-type/1
+
+
+
+删除索引
+
+# 按id删除
+$ curl -XDELETE 'http://localhost:9200/test-index/test-type/1'
+
+# 按查询删除
+$ curl -XDELETE 'http://localhost:9200/logstash-2013.03.*' 
+
+# 清空索引： 直接删除es的data目录（比较慢，可按照查询删除）
+
+
+搜索
+#lucene语法方式的查询
+$ curl -XGET http://localhost:9200/test-index/test-type/_search?q=user:kimchy
+
+#query DSL方式查询
+$ curl -XGET http://localhost:9200/test-index/test-type/_search -d '{
+    "query" : {
+        "term" : { "user": "kimchy" }
+    }
+}'
+
+#query DSL方式查询
+$ curl -XGET http://localhost:9200/test-index/_search?pretty=true -d '{
+    "query" : {
+        "range" : {
+            "post_date" : {
+                "from" : "2009-11-15T13:00:00",
+                "to" : "2009-11-15T14:30:00"
+            }
+        }
+    }
+}'
+
+#查找全部索引内容
+$ curl -XGET http://localhost:9200/test-index/test-type/_search?pretty=true
+
+
+设置
+#创建索引，并设置分片和副本参数
+$ curl -XPUT http://localhost:9200/elasticsearch/ -d '{
+    "settings" : {
+        "number_of_shards" : 2,
+        "number_of_replicas" : 3
+    }
+}'
+
+
+
+#分词
+curl -XGET 'http://localhost:9200/test-index/_analyze?text=中华人民共和国'
+
+
+#更新实时生效
+curl -XPOST http://localhost:9200/analyzetest/_close
+curl -XPOST http://localhost:9200/analyzetest/_open
+
+## alias
+step4，修改同义词。将指向v1的同义词，修改为指向v2。http接口如下：
+
+curl -XPOST localhost:9200/_aliases -d '
+{
+    "actions": [
+        { "remove": {
+            "alias": "my_index",
+            "index": "my_index_v1"
+        }},
+        { "add": {
+            "alias": "my_index",
+            "index": "my_index_v2"
+        }}
+    ]
+}
+'
+
+# END 

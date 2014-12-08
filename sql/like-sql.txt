@@ -1,0 +1,33 @@
+
+sql = "select id,tag,appCnName,appAuthor,appPackage,appCnName,appIcon,avgComment,commentCount,"
+					+ "appVersion,appVersionCode,downloadCount,patchs,apkSize,official from t_app_info"
+					+ " where" + " (appCnName like '%"
+					+ key
+					+ "%'"
+					+ " or appKeyWord like '%"
+					+ searchKey.getKey_name().trim()
+					+ "%')"
+					+ " and (appStatus="
+					+ Constants.APP_ONSALE
+					+ " or (appStatus="
+					+ Constants.APP_PART_ONSALE
+					+ " and filter_model not like '%,"
+					+ modelClass.getId()
+					+ ",%'))"
+					+ " and (minSdkVersion is null or minSdkVersion<="
+					+ modelClass.getSdkVersion()
+					+ ")"
+					+ " and (maxSdkVersion is null or maxSdkVersion>="
+					+ modelClass.getSdkVersion()
+					+ ")"
+					+
+					// " and " + subquery +
+					" order by downloadCount desc"
+					+ " limit "
+					+ (searchKey.getPage_index() - 1)
+							* searchKey.getApps_per_page()
+					+ ","
+					+ (searchKey.getApps_per_page() + 1);
+					
+					
+					

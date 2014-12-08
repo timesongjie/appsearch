@@ -1,0 +1,20 @@
+
+redis pubsub protocol:
+
+
+1. channel_name : 
+
+chan_appstore_indexing
+
+
+2. msg_format:
+
+{action:onsale,app_id:[2015,...]} 
+{action:offsale,app_id:[2016,...]} 
+{action:update_info,app_id:[2017,...]} 
+
+DEMO:
+
+redis-cli>
+publish chan_appstore_indexing '{"action":"update_info","app_id":2024}' 
+

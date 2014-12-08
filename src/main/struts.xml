@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	<package name="default" namespace="/" extends="struts-default">
+		<default-interceptor-ref name="basicStack" />
+		<global-results>
+			<result name="resourceNotExists">/exception/resourceNotExists.html
+			</result>
+			<result name="error_msg">/error_msg.jsp</result>
+		</global-results>
+		<global-exception-mappings>
+			<exception-mapping result="resourceNotExists"
+				exception="java.lang.IllegalArgumentException" />
+		</global-exception-mappings>
+
+		<action name="*" class="searchAction" method="{1}">
+			<result name="main">/search.jsp</result>
+		</action>
+	</package>
+	
+	<!-- old search url mapping -->
+	<package name="search" namespace="/" extends="json-default">
+		<action name="port/packages"  class="searchAction" method="search">
+			<result name="search_result">/search_result.jsp</result>
+		</action>
+		<action name="port/packages/"  class="searchAction" method="search">
+			<result name="search_result">/search_result.jsp</result>
+		</action>
+		<action name="appstore/search"  class="searchAction" method="search">
+			<result name="search_result">/search_result.jsp</result>
+		</action>
+		
+		<action name="port/perf"  class="searchActionForPerfTest" method="search">
+			<result name="search_result">/search_result.jsp</result>
+		</action>
+		
+		<action name="app/rec" class="recAction" method="moreLikeThis" >
+			<result name="rec_result">/rec_result.jsp</result>
+		</action>
+		<action name="search/sug" class="searchSugOldAction" method="searchSug"/>
+		<action name="search/sug/" class="searchSugOldAction" method="searchSug"/>
+		<action name="search/hotwords" class="searchSugOldAction" method="searchHotwords"/>
+		<action name="search/hotwords/" class="searchSugOldAction" method="searchHotwords"/>
+	</package>
+	
+	<!-- v2 search url mapping -->
+	<package name="search" namespace="/v2/" extends="json-default">
+		<action name="suggest" class="recAction" method="suggest" />
+		<action name="hotword" class="recAction" method="hotword" />
+	</package>
+	
+	<!-- v2 index url mapping [unused now] -->
+	<package name="index" namespace="/index" extends="json-default">
+		<action name="add" class="indexingAction" method="add" />
+		<action name="delete" class="indexingAction" method="delete" />
+		<action name="update" class="indexingAction" method="update" />
+	</package>
+	
+</struts>

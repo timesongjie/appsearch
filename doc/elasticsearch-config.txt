@@ -1,0 +1,18 @@
+
+master 
+
+
+slave 
+
+
+plugin
+
+插件安装方法： 
+
+./bin/plugin --install  de.spinscale/elasticsearch-plugin-suggest/1.0.1-2.0.0
+
+or 
+
+./bin/plugin -url https://github.com/downloads/spinscale/elasticsearch-suggest-plugin/elasticsearch-suggest-0.0.4-0.19.0.zip -install suggest 
+ 
+

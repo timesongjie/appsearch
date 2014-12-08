@@ -1,0 +1,23 @@
+
+message direction: 
+appstore   ==>  appsearch
+
+
+action: 
+onsale    ->  add index
+offsale    ->  delete index
+update app ->  reindex by app id
+
+	download count -> reindex by cron task ??? 
+
+message format: 
+{"action":"onsale","app_id":29989}
+{"action":"offsale","app_id":29989}
+{"action":"update_info","app_id":29989}
+
+demo code:
+
+jedis.publish("channel_name","msg")
+
+
+#END

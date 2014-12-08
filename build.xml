@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="appsearch" default="compile" basedir=".">
+
+	<property name="src.main.dir" value="src/main/" />
+	<property name="src.test.dir" value="src/test/" />
+	<property name="web.dir" value="WebRoot" />
+	<property name="classes.dir" value="${web.dir}/WEB-INF/classes/" />
+	<property name="lib.dir" value="${web.dir}/WEB-INF/lib" />
+	<property name="warname" value="dist/appsearch.war" />
+	<property name="catalina.home" value="/home/appstore/opt/appsearch_test/apache-tomcat-6.0.32"/>
+	<property name="deploy.path" value="/home/appstore/opt/appsearch_test/apache-tomcat-6.0.32/webapps/"></property>
+	
+	<path id="compile.classpath">
+		<fileset dir="${catalina.home}/lib">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- clean  -->
+	<target name="clean">
+		<delete dir="${classes.dir}" />
+	</target>
+
+	<!-- init -->
+	<target name="init" depends="clean">
+		<mkdir dir="${classes.dir}" />
+	</target>
+
+	<!--compile -->
+	<target name="compile" depends="clean,init">
+		<javac srcdir="${src.main.dir}" destdir="${classes.dir}" debug="on">
+			<classpath refid="compile.classpath" />
+		</javac>
+		<copy todir="${classes.dir}/">
+			<fileset dir="${src.main.dir}/">
+				<include name="**/*.xml"/>
+				<include name="**/*.properties"/>
+				<include name="**/*.yaml"/>
+			</fileset>
+		</copy>
+		<copy todir="${classes.dir}/resources/">
+					<fileset dir="${src.main.dir}/resources/">
+						<include name="**/*.xml"/>
+						<include name="**/*.properties"/>
+						<include name="**/*.yaml"/>
+					</fileset>
+		</copy>
+		<echo>compile finished !</echo>
+	</target>
+
+	
+	<!-- QA: ================ run test case -->
+	<!-- TODO-->
+	
+	<!-- QA: ================ source code check -->
+	<!--check style -->
+	<!-- TODO -->
+	
+	<!-- PMD -->
+	<!-- TODO -->
+	
+	<!-- QA: ================ class check -->
+	<!--find bugs-->
+	<!--<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask"/> -->
+	<!--
+	<property name="findbugs.home" value="/home/appstore/opt/vivo_ci/findbugs-3.0.0/lib"/>
+	<target name="findbugs" depends="compile"> 
+		<findbugs home="${findbugs.home}" output="xml" outputFile="./build/findbugs.xml"  jvmargs="-Xmx1024m" timeout="900000">                   
+			<class location="${class.dir}" />
+			<sourcePath path="${src.dir}" />
+		</findbugs>
+		<echo>Find bugs finished !</echo>
+	</target> 
+	-->
+	
+	
+	<!-- make war -->
+	<target name="war" depends="compile">
+		<war destfile="${warname}" webxml="${web.dir}/WEB-INF/web.xml">
+			<fileset dir="${web.dir}">
+				<include name="**/*.*" />
+			</fileset>
+		</war>
+		<echo>War finished !</echo>
+	</target>
+
+	<!-- deploy war to tomcat -->
+	<target name="deploywar" depends="war">
+		<copy todir="${deploy.path}" preservelastmodified="true">
+			<fileset dir=".">
+				<include name="${warname}" />
+			</fileset>
+		</copy>
+	</target>
+	
+	
+	<!-- RESTART TOMCAT -->
+	<!-- TODO -->
+
+</project>

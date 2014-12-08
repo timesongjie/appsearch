@@ -1,0 +1,14 @@
+
+master      6379
+ |_slave000 6380
+ |_slave001 6381
+ |_slave002 6382
+ |_slave003 6383
+
+- sentinel001 26179
+
+- sentinel002 26180 
+
+
+
+tools : info, monitor
